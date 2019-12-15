@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Cookie Example</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    
+    <!-- Cookie CSS -->
+    <style>
+    /* bof cookie */
+    .cookie {
+        background: #262834;
+        color: #fff;
+        width: 100%;
+        position: fixed;
+        left: 0px;
+        bottom: 0px;
+        opacity: 0.8;
+        z-index: 5;
+        display: none;
+        padding: 20px 20px;
+        margin: 0px;
+    }
+    .cookie a {
+        color: #fff;
+        text-decoration: none;
+    }
+    /* eof cookie */
+    </style>
+  </head>
+  <body>
+  <div class="container">
+      <div class="jumbotron">
+            <h1>Cookie Expiry Example</h1>
+            <h4 class="start"></h4>
+            <h4 class="expire"></h4>
+            <button class="btn btn-primary btn-reset-cookie">Reset Cookie</button>
+      </div>
+  </div>
+
+  <!-- START Cookie-Alert -->
+  <div class="cookie">
+    <div class="text-center" role="alert">
+        <b>Do you like cookies?</b> We use cookies to ensure you get the best experience on our website. <a href="https://cookiesandyou.com/" target="_blank">Learn more</a>
+        <button type="button" class="btn btn-primary btn-sm acceptcookies" aria-label="Close">
+            I agree
+        </button>
+    </div>
+  </div>
+  <!-- END Cookie-Alert -->
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+
+  <script>
+    $(document).ready(function(){
+
+        // Check if expire date is set
+        var expireDate = localStorage.getItem('expireDate');
+
+        // If expiry date has been set check against current date and reset if applicable
+        if (expireDate != null) {
+            var now = new Date().getTime();
+            if (expireDate <= now) {
+                localStorage.clear();
+                $(".cookie").fadeIn();
+            }
+        }
+
+        // Check Cookie Policy Status
+        var cookie = localStorage.cookie;
+        if (cookie === 'true') { 
+            $(".cookie").hide();
+        } else {
+            $(".cookie").show();
+        }
+
+        // Accept Cookie Policy
+        $("body").on("click", ".acceptcookies", function(){
+            var now = new Date().getTime();
+            var expires = new Date();
+            
+            // Set 1 minute for testing only so can be removed
+            var expireDate = new Date().getTime() + 60000;
+            //Set 30 days
+            //var expireDate = expires.setDate(expires.getDate()+30);
+            
+            localStorage.setItem('startDate', now);
+            localStorage.setItem('expireDate', expireDate);
+            localStorage.setItem('cookie', 'true');
+            $(".cookie").fadeOut();
+        });
+        
+        // Below is for reset button only so can be deleted
+        // Reset Cookie on Support button click
+        $("body").on("click", ".btn-reset-cookie", function(){
+            localStorage.clear();
+            $(".cookie").fadeIn();
+        });
+
+
+    });
+  </script>
+  </body>
+</html>
